@@ -6,15 +6,15 @@ REST API:
 
 /<folder>
     Lists the contents of the folder
-/<folder>/_small/<image>
+/_small/<folder>/<image>
     Returns a small version of the image. What the medium constants means in terms of size can be configured in the root access.txt and overridden in specific folders.
-/<folder>/_medium/<image>
+/_medium/<folder>/<image>
     Returns a medium version of the image.
-/<folder>/_large/<image>
+/_large/<folder>/<image>
     Returns a large version of the image.
-/<folder>/_w_<int>/<image>
+/_w_/<int>/<folder>/<image>
     Returns a version of the image resized proportionately  to width of <int>.
-/<folder>/_h_<int>/<image>
+/_h_/<int>/<folder>/<image>
     Returns a version of the image resized proportionately to height of <int>.
 
 Hitting a folder will list the images and folders contained within it. Each folder can contain an access.txt file which dictates the permissions of the folder and any content within it. 
