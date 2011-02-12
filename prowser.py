@@ -1,4 +1,5 @@
 from bottle import route, run, static_file, error, template
+from bottle import jinja2_view as view
 from bottle import debug as bottle_debug
 import settings
 import os, errno
@@ -69,23 +70,19 @@ def return_image(path, file, width=None, height=None):
 
     return static_file(os.path.join(path, file), root=settings.DOCUMENT_ROOT)
 
+@view('templates/list_dir')
 def return_directory(path):
-    # DOES NOT WORK YET!
-    return "Listing %s" % path
-    images  = []
-    folders = []
-    for file in os.listdir(os.path.join(settings.DOCUMENT_ROOT, path)):
-        if os.path.isdir(os.path.join(settings.DOCUMENT_ROOT, path, file)):
+    local_path = os.path.join(settings.DOCUMENT_ROOT, path)
+    images     = []
+    folders    = []
+    for file in os.listdir(local_path):
+        if os.path.isdir(os.path.join(local_path, file)):
             if file[0] != "." and file[0] != "_":
                 folders.append(file)
         elif len(os.path.splitext(file)) and os.path.splitext(file)[-1].lower() in settings.IMAGE_EXTENSIONS:
             images.append(file)
 
-        print os.path.splitext(file)
-
-    print images
-    print folders
-    return "Listing dir"
+    return dict(path=path, images=images, folders=folders)
 
 def mkdir_p(path):
     """ Simple mkdir -p functionality for python """
@@ -133,6 +130,9 @@ def index(requested_path=None):
 
     if filename:
         path_array = path.strip("/").split("/")
+
+        if os.path.isdir(os.path.join(settings.DOCUMENT_ROOT, requested_path)):
+            return return_directory(requested_path)
 
         # Modifier without argument
         if len(path_array) and path_array[0] in MODIFIERS.keys():

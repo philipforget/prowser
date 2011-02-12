@@ -1,11 +1,12 @@
 import os
 
 DEBUG            = True
-STATIC_ROOT      = os.path.expanduser("~/workspace/prowser/static")
-DOCUMENT_ROOT    = os.path.expanduser("~/workspace/prowser/documents")
-TEMPLATES_DIR    = os.path.join(os.path.dirname(__file__), "templates")
+PROJECT_DIR      = os.path.dirname(__file__)
+STATIC_ROOT      = os.path.join(PROJECT_DIR, "static")
+TEMPLATES_DIR    = os.path.join(PROJECT_DIR, "templates")
+DOCUMENT_ROOT    = os.path.expanduser("~/Documents")
 IMAGE_EXTENSIONS = [
-    "png",
-    "jpg",
-    "jpeg",
+    ".png",
+    ".jpg",
+    ".jpeg",
 ]
