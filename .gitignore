@@ -4,6 +4,8 @@ lib
 share
 build
 .Python
+# Ignore local copy of Bottle
+bottle.py
 
 *.pyc
 *.swp
