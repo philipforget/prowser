@@ -1,30 +1,13 @@
 from bottle import route, run, static_file, error, template
+
 from bottle import jinja2_view as view
 from bottle import debug as bottle_debug
+from functools import partial
 import settings
 import os, errno
 import Image
 
 bottle_debug(settings.DEBUG)
-
-# Modifiers: must return a static_file or 404
-def thumb(path, file):
-    return return_image(path, file, width=128, height=128)
-
-def small(path, file):
-    return return_image(path, file, width=400, height=400)
-
-def medium(path, file):
-    return return_image(path, file, width=1000, height=1000)
-
-def large(path, file):
-    return return_image(path, file, width=2400, height=2400)
-
-def height_relative(path, file, height):
-    return return_image(path, file, height=height)
-
-def width_relative(path, file, width):
-    return return_image(path, file, width=width)
 
 def return_image(path, file, width=None, height=None):
     file_to_return = os.path.join(path, file)
@@ -70,6 +53,7 @@ def return_image(path, file, width=None, height=None):
 
     return static_file(os.path.join(path, file), root=settings.DOCUMENT_ROOT)
 
+
 @view('templates/list_dir')
 def return_directory(path):
     local_path = os.path.join(settings.DOCUMENT_ROOT, path)
@@ -82,7 +66,9 @@ def return_directory(path):
         elif len(os.path.splitext(file)) and os.path.splitext(file)[-1].lower() in settings.IMAGE_EXTENSIONS:
             images.append(file)
 
+    path = "." if not path else path
     return dict(path=path, images=images, folders=folders)
+
 
 def mkdir_p(path):
     """ Simple mkdir -p functionality for python """
@@ -93,15 +79,16 @@ def mkdir_p(path):
             pass
         else: raise
 
+
 MODIFIERS = {
-    "_thumb":  thumb,
-    "_small":  small,
-    "_medium": medium,
-    "_large":  large,
+    "_thumb":  partial(return_image, width=128, height=128),
+    "_small":  partial(return_image, width=400, height=400),
+    "_medium": partial(return_image, width=1000, height=1000),
+    "_large":  partial(return_image, width=2400, height=2400),
 }
 MODIFIERS_WITH_ARGUMENTS = {
-    "_w_":     width_relative,
-    "_h_":     height_relative,
+    "_h_": return_image,
+    "_w_": return_image,
 }
 
 @error(404)
@@ -140,7 +127,7 @@ def index(requested_path=None):
 
         # Modifier with argument
         elif len(path_array) > 1 and path_array[0] in MODIFIERS_WITH_ARGUMENTS.keys():
-            func = MODIFIERS_WITH_ARGUMENTS[path_array[-2]]
+            func = MODIFIERS_WITH_ARGUMENTS[path_array[0]]
             try:
                 arg = int(path_array[1])
                 arg = arg if arg > 0 else -1 * arg
