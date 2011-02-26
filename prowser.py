@@ -1,11 +1,11 @@
-from bottle import route, run, static_file, error, template
-
+from bottle import route, run, static_file, error
 from bottle import jinja2_view as view
 from bottle import debug as bottle_debug
 from functools import partial
 import settings
 import os, errno
 import Image
+import urllib
 
 bottle_debug(settings.DEBUG)
 
@@ -56,18 +56,22 @@ def return_image(path, file, width=None, height=None):
 
 @view('templates/list_dir')
 def return_directory(path):
-    local_path = os.path.join(settings.DOCUMENT_ROOT, path)
+    directory = os.path.abspath(os.path.join(settings.DOCUMENT_ROOT, path))
+    # Make sure people arent trying to travese directories
+    if directory.find(settings.DOCUMENT_ROOT) == -1:
+        return error404("y u try traversing directories?")
+
     images     = []
     folders    = []
-    for file in os.listdir(local_path):
-        if os.path.isdir(os.path.join(local_path, file)):
+    for file in os.listdir(directory):
+        if os.path.isdir(os.path.join(directory, file)):
             if file[0] != "." and file[0] != "_":
-                folders.append(file)
+                folders.append(urllib.quote(file))
         elif len(os.path.splitext(file)) and os.path.splitext(file)[-1].lower() in settings.IMAGE_EXTENSIONS:
-            images.append(file)
+            images.append(urllib.quote(file))
 
-    path = "." if not path else path
     return dict(path=path, images=images, folders=folders)
+
 
 
 def mkdir_p(path):
@@ -116,7 +120,8 @@ def index(requested_path=None):
         filename = None
 
     if filename:
-        path_array = path.strip("/").split("/")
+        filename = urllib.unquote(filename)
+        path_array = path.strip("/").lstrip("./").lstrip("../").split("/")
 
         if os.path.isdir(os.path.join(settings.DOCUMENT_ROOT, requested_path)):
             return return_directory(requested_path)
