@@ -1,0 +1,16 @@
+<VirtualHost *:80>
+	ServerName	ebay.chevalierforget.com
+
+	WSGIDaemonProcess prowser user=www-data group=www-data processes=1 threads=5 python-path=/path_to_your_virtualenv/lib/python2.6/site-packages
+	WSGIScriptAlias / /path_to_your/app.wsgi
+
+	ErrorLog /var/log/apache2/error.log
+	LogLevel info
+
+ 	Alias /static /path_to/static
+ 	<Location "/static">
+ 		SetHandler None
+ 	</Location>
+
+	CustomLog /var/log/apache2/access.log combined
+</VirtualHost>

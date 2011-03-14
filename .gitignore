@@ -6,6 +6,9 @@ build
 .Python
 # Ignore local copy of Bottle
 bottle.py
+images/*
+app.wsgi
+local_settings.py
 
 *.pyc
 *.swp

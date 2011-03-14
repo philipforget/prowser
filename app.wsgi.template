@@ -1,7 +1,12 @@
-# Change working directory so relative paths (and template lookup) work again
+import site
+# virtualenv packages
+site.addsitedir('/home/philipforget/workspace/prowser/lib/python2.6/site-packages')
+# the actual project root
+site.addsitedir('/home/philipforget/workspace/prowser')
+
+import os
 os.chdir(os.path.dirname(__file__))
 
-import bottle
-
+from prowser import *
 
 application = bottle.default_app()

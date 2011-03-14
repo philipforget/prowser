@@ -1,11 +1,13 @@
+import os, errno, sys
+import bottle
 from bottle import route, run, static_file, error
 from bottle import jinja2_view as view
 from bottle import debug as bottle_debug
 from functools import partial
-import settings
-import os, errno
 import Image
 import urllib
+
+import settings
 
 bottle_debug(settings.DEBUG)
 
@@ -37,12 +39,10 @@ def return_image(path, file, width=None, height=None):
 
             elif width:
                 new_height = (width * original_height) / original_width
-                print new_height
                 image.thumbnail((width, new_height), Image.ANTIALIAS)
 
             elif height:
                 new_width = (height * original_width) / original_height
-                print new_width
                 image.thumbnail((new_width, height), Image.ANTIALIAS)
 
             image.save(os.path.join(settings.DOCUMENT_ROOT, resize_directory, filename))
@@ -71,7 +71,6 @@ def return_directory(path):
             images.append(urllib.quote(file))
 
     return dict(path=path, images=images, folders=folders)
-
 
 
 def mkdir_p(path):
@@ -146,7 +145,4 @@ def index(requested_path=None):
         
     return return_directory(path)
 
-
-
-if settings.DEBUG:
-    run(host="localhost", port=8080, reloader=settings.DEBUG)
+application = bottle.default_app()

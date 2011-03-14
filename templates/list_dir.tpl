@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>{{ path }}</title>
-        <link rel="stylesheet" href="/static/screen.css" type="text/css" media="screen" charset="utf-8">
+        <link rel="stylesheet" href="/static/css/screen.css" type="text/css" media="screen" charset="utf-8">
     </head>
     <body>
         {% if folders or path %}

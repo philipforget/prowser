@@ -1,0 +1,4 @@
+from settings import *
+import os
+
+DOCUMENT_ROOT    = os.path.expanduser('/path_to_your/images')
