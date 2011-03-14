@@ -98,10 +98,9 @@ MODIFIERS_WITH_ARGUMENTS = {
 def error404(error):
     return error
 
-# You should really be using nginx for this, but it's ok!
-@route('/static/:filename')
-def server_static(filename):
-    return static_file(filename, root=settings.STATIC_ROOT)
+@route('/static/:path#.+#')
+def server_static(path):
+    return static_file(path, root=settings.STATIC_ROOT)
 
 @route('/')
 @route('/:requested_path#.+#')
@@ -145,4 +144,9 @@ def index(requested_path=None):
         
     return return_directory(path)
 
-application = bottle.default_app()
+# If running dev server
+if __name__ == '__main__':
+    run(host="0.0.0.0", port="8080", reloader=True)
+
+else:
+    application = bottle.default_app()
