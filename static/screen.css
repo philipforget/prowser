@@ -2,34 +2,56 @@
 	width: 800px;
 	background-color: #590031;
 	border-radius: 20px;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
 	padding: 20px;
 	background-image: url(/static/giza.gif);
+}
+
+#chevalierforget a img {
+    text-decoration: none;
+    border: none;
 }
 
 #chevalierforget .description {
 	margin: 60px auto;
 	width: 600px;
 	font-family: helvetica, arial, sans-serif;
-	font-size: 14px;
+	font-size: 18px;
 	background: rgba(255,255,255,0.8);
 	padding: 20px;
 	border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
 }
 
-#chevalierforget h1 {
+#chevalierforget .description h1 {
 	font-size: 48px;
+    text-align: center;
+    font-weight: normal;
+}
+
+#chevalierforget .description h2 {
+    font-weight: normal;
+    text-align: center;
+	font-size: 26px;
 }
 
 #chevalierforget ol {
 	list-style: none;
+    text-align: center;
 }
+
 	#chevalierforget ol li {
 		background: rgba(255,255,255,0.5);
 		border-radius: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
 		padding: 5px;
 		display: inline-block;
 		margin: 5px;
 	}
+
 
 	#chevalierforget ol li:hover {
 		background: rgba(255,255,255,0.8);
