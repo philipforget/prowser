@@ -9,8 +9,6 @@ import urllib
 
 import settings
 
-bottle_debug(settings.DEBUG)
-
 def return_image(path, file, width=None, height=None):
     file_to_return = os.path.join(path, file)
     if not os.path.isfile(os.path.join(settings.DOCUMENT_ROOT, file_to_return)):
@@ -57,6 +55,7 @@ def return_image(path, file, width=None, height=None):
 @view('templates/list_dir')
 def return_directory(path):
     directory = os.path.abspath(os.path.join(settings.DOCUMENT_ROOT, path))
+
     # Make sure people arent trying to travese directories
     if directory.find(settings.DOCUMENT_ROOT) == -1:
         return error404("y u try traversing directories?")
@@ -69,6 +68,8 @@ def return_directory(path):
                 folders.append(urllib.quote(file))
         elif len(os.path.splitext(file)) and os.path.splitext(file)[-1].lower() in settings.IMAGE_EXTENSIONS:
             images.append(urllib.quote(file))
+
+    images = sorted(images)
 
     return dict(path=path, images=images, folders=folders)
 
@@ -144,9 +145,4 @@ def index(requested_path=None):
         
     return return_directory(path)
 
-# If running dev server
-if __name__ == '__main__':
-    run(host="0.0.0.0", port="8080", reloader=True)
-
-else:
-    application = bottle.default_app()
+app = bottle.default_app()

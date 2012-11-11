@@ -13,4 +13,4 @@ IMAGE_EXTENSIONS = [
     ".jpeg",
 ]
 
-from local_settings import *
+DOCUMENT_ROOT = '/home/philipforget/prowser_root'
